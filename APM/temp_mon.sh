@@ -1,7 +1,26 @@
 #!/system/bin/sh
 
 . /sdcard/Scripts/APM/Config/temp_limit.conf
-. /sdcard/Scripts/myFunctions.sh
+
+toBinary() # 1:index
+{
+    byte=0x80
+    out=
+    while [[ $byte > 0 ]]; do
+        [ $((byte & $1)) == $byte ] && out+=1 || out+=0
+        byte=$((byte >> 1))
+    done
+    echo $out
+}
+
+writeTo()   # 1:filename 2:data
+{
+    if [[ -f $1 ]]; then
+        chmod 644 $1
+        echo "$2" > $1
+        chmod 444 $1
+    fi
+}
 
 getTemp()
 {
